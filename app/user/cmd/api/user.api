@@ -1,0 +1,124 @@
+/**
+* @Author: MJ
+* @Email: 1725014728@qq.com
+* @Date: 2022/8/15-9:23
+* @Desc: goctl api go -api user.api -dir . -style goZero
+*/
+
+syntax = "v1"
+
+info(
+	title: "api"
+	desc: "用户api说明"
+	author: "MJ"
+	email: "1725014728@qq.com"
+	version: "v1"
+)
+
+type (
+	User {
+		Id       int64  `json:"id"`
+		UserName string `json:"userName"`
+		Avatar   string `json:"avatar"`
+		Info     string `json:"info"`
+
+		Following int64 `json:"following"`
+		Follower  int64 `json:"follower"`
+		Agreed    int64 `json:"agreed"`
+
+		Liked     int64 `json:"liked"`
+		Collected int64 `json:"collected"`
+
+		Gender int `json:"gender"`
+	}
+)
+
+type (
+	RegisterReq {
+		Email    string `form:"email" binding:"required"`
+		UserName string `form:"name" binding:"required"`
+		Password string `form:"password" binding:"required"`
+		Code     string `form:"code"`
+	}
+	RegisterResp {
+		Status       int    `json:"status"`
+		Msg          string `json:"msg"`
+		AccessToken  string `json:"access_token"`
+		AccessExpire int64  `json:"access_expire"`
+		RefreshAfter int64  `json:"refresh_after"`
+	}
+)
+
+type (
+	LoginReq {
+		Email    string `form:"account"`
+		Password string `form:"password"`
+	}
+	LoginResp {
+		Status       int    `json:"status"`
+		Msg          string `json:"msg"`
+		AccessToken  string `json:"access_token"`
+		AccessExpire int64  `json:"access_expire"`
+		RefreshAfter int64  `json:"refresh_after"`
+	}
+)
+type (
+	UserInfoReq {
+	}
+	UserInfoResp {
+		Status   int    `json:"status"`
+		Msg      string `json:"msg"`
+		UserInfo User   `json:"userInfo"`
+	}
+)
+
+type (
+	OAuthReq {
+		Code string `form:"code"`
+	}
+	OAuthResp {
+		Status       int    `json:"status"`
+		Msg          string `json:"msg"`
+		AccessToken  string `json:"access_token"`
+		AccessExpire int64  `json:"access_expire"`
+		RefreshAfter int64  `json:"refresh_after"`
+	}
+)
+type (
+	SendEmailReq {
+		Email string `form:"email"`
+	}
+
+	SendEmailResp {
+		VarifyCode string `json:"varify_code"`
+	}
+)
+
+@server(
+	group: user
+)
+
+service user {
+	
+	@handler register
+	post /user/register (RegisterReq) returns (RegisterResp)
+	
+	@handler login
+	post /user/login (LoginReq) returns (LoginResp)
+	
+	@handler oauth
+	post /user/oauth  returns (LoginResp)
+	
+	@handler sendEmail
+	post /varify/email (SendEmailReq) returns (SendEmailResp)
+}
+
+@server(
+	group: user
+	middleware: Auth
+)
+
+service user {
+	@handler detail
+	get /user/own/detail (UserInfoReq)returns (UserInfoResp)
+}

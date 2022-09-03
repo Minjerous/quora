@@ -1,0 +1,168 @@
+syntax = "proto3";
+
+option go_package ="./pb";
+
+package pb;
+
+// ------------------------------------
+// Messages
+// ------------------------------------
+message ChildComment {
+  int64 id = 1; //id
+  int64 pid = 2; //pid
+  string content = 3; //content
+  int64 uid = 4; //uid
+  int64 likes = 5; //likes
+  int64 createAt = 6; //createAt
+  int64 replyId = 7; //replyId
+  string ip = 8; //ip
+}
+
+message AddChildCommentReq {
+  int64 pid = 1; //pid
+  string content = 2; //content
+  int64 uid = 3; //uid
+  int64 createAt = 4; //createAt
+  int64 replyUid = 5; //replyId
+  int64 replyCid=6;
+  string ip = 7; //ip
+}
+
+message AddChildCommentResp {
+  int64  id = 1;
+}
+
+message UpdateChildCommentReq {
+  int64 id = 1; //id
+  int64 pid = 2; //pid
+  string content = 3; //content
+  int64 uid = 4; //uid
+  int64 likes = 5; //likes
+  int64 createAt = 6; //createAt
+  int64 replyId = 7; //replyId
+  string ip = 8; //ip
+}
+
+message UpdateChildCommentResp {
+}
+
+message DelChildCommentReq {
+  int64 id = 1; //id
+}
+
+message DelChildCommentResp {
+}
+
+message GetChildCommentByPidReq {
+  int64 Pid = 1; //id
+}
+
+message GetChildCommentByPidResp {
+  repeated ChildComment childComment = 1; //childComment
+}
+
+message SearchChildCommentReq {
+  int64 page = 1; //page
+  int64 pageSize = 2; //pageSize
+  int64 id = 3; //id
+  int64 pid = 4; //pid
+  string content = 5; //content
+  int64 uid = 6; //uid
+  int64 likes = 7; //likes
+  int64 createAt = 8; //createAt
+  int64 replyId = 9; //replyId
+  string ip = 10; //ip
+}
+
+message SearchChildCommentResp {
+  repeated ChildComment childComment = 1; //childComment
+}
+
+//--------------------------------comment--------------------------------
+message CommentBase {
+  int64 Id = 1; //Id
+  string resourceType = 2; //resourceType
+  int64 uid = 3; //uid
+  string content = 4; //content
+  int64 likes = 5; //likes
+  int64 childCommentNuber = 6; //childCommentNuber
+  int64 createAt = 7; //createAt
+  string ip = 8; //ip
+  repeated ChildComment childComment =9;
+}
+
+message AddCommentReq {
+  string resourceType = 1; //resourceType
+  int64 uid = 2; //uid
+  string content = 3; //content
+  int64 childCommentNumber = 4; //childCommentNuber
+  int64 createAt = 5; //createAt
+  string ip = 6; //ip
+  int64  Pid =7;
+
+}
+
+message AddCommentResp {
+  int64 id=1;
+}
+
+message UpdateCommentReq {
+  int64 Id = 1; //Id
+  string resourceType = 2; //resourceType
+  int64 uid = 3; //uid
+  string content = 4; //content
+  int64 createAt = 5; //createAt
+  string ip = 6; //ip
+}
+
+message UpdateCommentResp {
+}
+
+message DelCommentReq {
+  int64 id = 1; //id
+}
+
+message DelCommentResp {
+}
+
+message GetCommentByPidReq {
+  int64 id = 1; //id
+}
+
+message GetCommentByPidResp {
+  repeated CommentBase comments = 1; //comment
+}
+
+message SearchCommentReq {
+  int64 page = 1; //page
+  int64 pageSize = 2; //pageSize
+  int64 Id = 3; //Id
+  string resourceType = 4; //resourceType
+  int64 uid = 5; //uid
+  string content = 6; //content
+  int64 likes = 7; //likes
+  int64 childCommentNumber = 8; //childCommentNuber
+  int64 createAt = 9; //createAt
+  string ip = 10; //ip
+}
+
+message SearchCommentResp {
+  repeated CommentBase commentBase = 1; //comment
+}
+
+
+service comment{
+
+  rpc AddChildComment(AddChildCommentReq) returns (AddChildCommentResp);
+  rpc UpdateChildComment(UpdateChildCommentReq) returns (UpdateChildCommentResp);
+  rpc DelChildComment(DelChildCommentReq) returns (DelChildCommentResp);
+  rpc GetChildCommentByPId(GetChildCommentByPidReq) returns (GetChildCommentByPidResp);
+  rpc SearchChildComment(SearchChildCommentReq) returns (SearchChildCommentResp);
+  //-----------------------comment-----------------------
+  rpc AddComment(AddCommentReq) returns (AddCommentResp);
+  rpc UpdateComment(UpdateCommentReq) returns (UpdateCommentResp);
+  rpc DelComment(DelCommentReq) returns (DelCommentResp);
+  rpc GetCommentByPid(GetCommentByPidReq) returns (GetCommentByPidResp);
+  rpc SearchComment(SearchCommentReq) returns (SearchCommentResp);
+
+}

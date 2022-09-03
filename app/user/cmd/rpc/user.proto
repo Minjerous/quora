@@ -1,0 +1,101 @@
+syntax = "proto3";
+
+option go_package = "./pb";
+
+package pb;
+
+
+message GetUserInfoReq {
+  int64  id = 1;
+}
+
+message GetUserInfoResp {
+  UserInfo user =1;
+  bool  OK = 2;
+}
+
+message UserInfo{
+  int64   id=1;
+  string  username=2;
+  string  avatar=3;
+  int64   agreed=4;
+  int64   liked=5;
+  int64   collected=6;
+  int64   follower=7;
+  int64   following=8;
+}
+
+message LoginReq {
+  string  email =1;
+  string  password = 2;
+}
+
+
+message LoginResp {
+  string accessToken = 1;
+  int64  accessExpire = 2;
+  int64  refreshAfter = 3;
+  bool   OK=4;
+}
+
+message GenerateTokenReq {
+  int64 userId = 1;
+  string name=2;
+}
+
+message GenerateTokenResp {
+  string accessToken = 1;
+  int64  accessExpire = 2;
+  int64  refreshAfter = 3;
+  bool   OK=4;
+}
+
+message OAuthLoginReq {
+  string Code = 1;
+}
+
+message  OAuthLoginResp {
+  string accessToken = 1;
+  int64  accessExpire = 2;
+  int64  refreshAfter = 3;
+  string message=4;
+  bool   OK=5;
+}
+
+message RegisterReq{
+  string  Email = 1;
+  string  PassWord = 2;
+  string  Name = 3;
+}
+
+message RegisterResp{
+  string accessToken = 1;
+  int64  accessExpire = 2;
+  int64  refreshAfter = 3;
+  bool   OK=4;
+}
+
+message SendEmailReq{
+  string Email = 1;
+}
+
+message SendEmailResp{
+  string Code = 1;
+  bool  OK = 2;
+}
+message VerifyEmailCodeReq{
+  string  Code=1;
+  string  Email=2;
+}
+message VerifyEmailCodeResp{
+  bool OK=1;
+}
+service User {
+  rpc getUserInfo(GetUserInfoReq) returns(GetUserInfoResp);
+  rpc login(LoginReq) returns(LoginResp);
+  rpc oauthLogin(LoginReq) returns(OAuthLoginResp);
+  rpc register(RegisterReq) returns (RegisterResp);
+  rpc verifyEmailCode (VerifyEmailCodeReq) returns (VerifyEmailCodeResp);
+  rpc generateToken(GenerateTokenReq) returns(GenerateTokenResp);
+  rpc sendEmail(SendEmailReq) returns (SendEmailResp);
+}

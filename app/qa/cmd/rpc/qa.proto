@@ -1,0 +1,244 @@
+syntax = "proto3";
+
+option go_package ="./pb";
+
+package pb;
+
+// ------------------------------------
+// Messages
+// ------------------------------------
+
+//--------------------------------answer--------------------------------
+message Answer {
+  int64 id = 1; //id
+  int64 uid = 2; //uid
+  int64 pid = 3; //pid
+  string type = 4; //type
+  string value = 5; //value
+  int64 likes = 6; //likes
+  int64 disagrees = 7; //disagrees
+  int64 agrees = 8; //agrees
+  int64 collections = 9; //collections
+  int64 followers = 10; //followers
+  int64 createdAt = 11; //createdAt
+  int64 deletedAt = 12; //deletedAt
+  int64 updateAt = 13; //updateAt
+  int64 comments=14;
+
+}
+
+message AddAnswerReq {
+  int64 uid = 1; //uid
+  int64 pid = 2; //pid
+  string type = 3; //type
+  string value = 4; //value
+  int64 likes = 5; //likes
+  int64 disagrees = 6; //disagrees
+  int64 agrees = 7; //agrees
+  int64 collections = 8; //collections
+  int64 followers = 9; //followers
+  int64 createdAt = 10; //createdAt
+  int64 deletedAt = 11; //deletedAt
+  int64 updateAt = 12; //updateAt
+}
+
+message AddAnswerResp {
+  int64  id = 1;
+}
+
+message UpdateAnswerReq {
+  int64 id = 1; //id
+  int64 uid = 2; //uid
+  int64 pid = 3; //pid
+  string type = 4; //type
+  string value = 5; //value
+  int64 likes = 6; //likes
+  int64 disagrees = 7; //disagrees
+  int64 agrees = 8; //agrees
+  int64 collections = 9; //collections
+  int64 followers = 10; //followers
+  int64 createdAt = 11; //createdAt
+  int64 deletedAt = 12; //deletedAt
+  int64 updateAt = 13; //updateAt
+}
+
+message UpdateAnswerResp {
+}
+
+message DelAnswerReq {
+  int64 id = 1; //id
+  int64 uid=2;
+  int64 pid=3;
+
+}
+
+message DelAnswerResp {
+}
+
+message GetAnswerByIdReq {
+  int64 id = 1; //id
+  int64 uid = 2; //id
+}
+
+message GetAnswerByIdResp {
+  Answer answer = 1; //answer
+}
+
+message SearchAnswerReq {
+  int64 page = 1; //page
+  int64 pageSize = 2; //pageSize
+  int64 id = 3; //id
+  int64 uid = 4; //uid
+  int64 pid = 5; //pid
+  string type = 6; //type
+  string value = 7; //value
+  int64 likes = 8; //likes
+  int64 disagrees = 9; //disagrees
+  int64 agrees = 10; //agrees
+  int64 collections = 11; //collections
+  int64 followers = 12; //followers
+  int64 createdAt = 13; //createdAt
+  int64 deletedAt = 14; //deletedAt
+  int64 updateAt = 15; //updateAt
+  int64 comments=16;
+}
+
+message SearchAnswerResp {
+  repeated Answer answer = 1; //answer
+}
+
+//--------------------------------question--------------------------------
+message Question {
+  int64 id = 1; //id
+  int64 uid = 2; //uid
+  string topic = 3; //topic
+  string title = 4; //title
+  string value = 5; //value
+  int64 comments = 6; //comments
+  int64 collections = 7; //collections
+  int64 likes = 8; //likes
+  int64 pageviews = 9; //pageviews
+  string followers = 10; //followers
+  int64 createdAt = 11; //createdAt
+  int64 deletedAt = 12; //deletedAt
+  int64 updateAt = 13; //updateAt
+}
+
+message AddQuestionReq {
+  int64 uid = 1; //uid
+  string topic = 2; //topic
+  string title = 3; //title
+  string value = 4; //value
+  int64 comments = 5; //comments
+  int64 collections = 6; //collections
+  int64 likes = 7; //likes
+  int64 pageviews = 8; //pageviews
+  string followers = 9; //followers
+  int64 createdAt = 10; //createdAt
+  int64 deletedAt = 11; //deletedAt
+  int64 updateAt = 12; //updateAt
+}
+
+message AddQuestionResp {
+  int64  id=1;
+}
+
+message UpdateQuestionReq {
+  int64 id = 1; //id
+  int64 uid = 2; //uid
+  string topic = 3; //topic
+  string title = 4; //title
+  string value = 5; //value
+  int64 comments = 6; //comments
+  int64 collections = 7; //collections
+  int64 likes = 8; //likes
+  int64 pageviews = 9; //pageviews
+  string followers = 10; //followers
+  int64 createdAt = 11; //createdAt
+  int64 deletedAt = 12; //deletedAt
+  int64 updateAt = 13; //updateAt
+}
+
+message UpdateQuestionResp {
+}
+
+message DelQuestionReq {
+  int64 id = 1; //id
+  int64 uid=2;
+}
+
+message DelQuestionResp {
+}
+
+message GetQuestionByIdReq {
+  int64 id = 1; //id
+  int64  pageSize=2;
+}
+
+message GetQuestionByIdResp {
+  Question question = 1; //question
+}
+
+message SearchQuestionReq {
+  int64 page = 1; //page
+  int64 pageSize = 2; //pageSize
+  int64 id = 3; //id
+  int64 uid = 4; //uid
+  string topic = 5; //topic
+  string title = 6; //title
+  string value = 7; //value
+  int64 comments = 8; //comments
+  int64 collections = 9; //collections
+  int64 likes = 10; //likes
+  int64 pageviews = 11; //pageviews
+  string followers = 12; //followers
+  int64 createdAt = 13; //createdAt
+  int64 deletedAt = 14; //deletedAt
+  int64 updateAt = 15; //updateAt
+}
+
+message SearchQuestionResp {
+  repeated Question question = 1; //question
+}
+
+message GetAnswerListByPidReq{
+  int64  qid = 1;
+  int64  PageSize = 2;
+}
+message GetAnswerListByPidResp{
+  repeated Question question=1;
+}
+
+message GetAnswerListByUidReq{
+  int64  uid = 1;
+  int64  PageSize = 2;
+
+}
+
+message GetAnswerListByUidResp{
+  repeated Question question=1;
+}
+
+// ------------------------------------
+// Rpc Func
+// ------------------------------------
+
+service qa{
+
+  //-----------------------answer-----------------------
+  rpc AddAnswer(AddAnswerReq) returns (AddAnswerResp);
+  rpc UpdateAnswer(UpdateAnswerReq) returns (UpdateAnswerResp);
+  rpc DelAnswer(DelAnswerReq) returns (DelAnswerResp);
+  rpc GetAnswerById(GetAnswerByIdReq) returns (GetAnswerByIdResp);
+  rpc SearchAnswer(SearchAnswerReq) returns (SearchAnswerResp);
+  rpc GetAnswerListByQid (GetAnswerListByPidReq) returns (GetAnswerListByPidResp);
+  rpc GetAnswerListByUid (GetAnswerListByUidReq) returns (GetAnswerListByUidResp);
+
+  //-----------------------question-----------------------
+  rpc AddQuestion(AddQuestionReq) returns (AddQuestionResp);
+  rpc UpdateQuestion(UpdateQuestionReq) returns (UpdateQuestionResp);
+  rpc DelQuestion(DelQuestionReq) returns (DelQuestionResp);
+  rpc GetQuestionById(GetQuestionByIdReq) returns (GetQuestionByIdResp);
+  rpc SearchQuestion(SearchQuestionReq) returns (SearchQuestionResp);
+
+}

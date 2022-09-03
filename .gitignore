@@ -1,0 +1,20 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.sh
+*.yaml
+# Test binary, built with `go test -c`
+*.test
+
+etc
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+.idea
+
+
+deploy
+# Dependency directories (remove the comment below to include it)
+# vendor/

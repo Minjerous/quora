@@ -1,0 +1,126 @@
+version: '3.7'
+
+services:
+
+#user
+  user-api:
+    build: app/user/cmd/api
+    container_name: quora-user-api
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - quora_net
+
+  user-rpc:
+    build: app/user/cmd/rpc
+    container_name: quora-user-rpc
+    restart: always
+    ports:
+      - "9091:9091"
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - quora_net
+
+#question
+  question-api:
+    build: app/question/cmd/api
+    container_name: quora-question-api
+    restart: always
+    ports:
+      - "8082:8082"
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - quora_net
+
+
+  question-rpc:
+    build: app/question/cmd/rpc
+    container_name: quora-question-rpc
+    restart: always
+    ports:
+      - "9092:9092"
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - quora_net
+
+#comment
+  comment-api:
+    build: app/comment/cmd/api
+    container_name: quora-comment-api
+    restart: always
+    ports:
+      - "8083:8083"
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - quora_net
+
+
+  comment-rpc:
+    build: app/comment/cmd/rpc
+    container_name: quora-comment-rpc
+    restart: always
+    ports:
+      - "9093:9093"
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - quora_net
+
+  action-api:
+    build: app/action/cmd/api
+    container_name: quora-action-rpc
+    restart: always
+    ports:
+      - "8084:8084"
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - quora_net
+
+  action-rpc:
+    build: app/action/cmd/rpc
+    container_name: quora-action-rpc
+    restart: always
+    ports:
+      - "8084:8084"
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - quora_net
+
+  mq-api:
+    build : app/mq/cmd/api
+    container_name : quora-mq-api
+    restart : always
+    ports :
+      - "8084:8084"
+    environment :
+      - TZ=Asia/Shanghai
+    networks :
+      - quora_net
+
+
+  mq-rpc:
+    build : app/mq/cmd/rpc
+    container_name : quora-mq-rpc
+    restart : always
+    ports :
+      - "8084:8084"
+    environment :
+      - TZ=Asia/Shanghai
+    networks :
+      - quora_net
+
+networks:
+  quora_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16

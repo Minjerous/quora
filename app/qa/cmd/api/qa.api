@@ -1,0 +1,217 @@
+/**
+* @Author: MJ
+* @Email: 1725014728@qq.com
+* @Date: 2022/8/24-8:32
+* @Desc: 摆的时间有点久
+*/
+
+syntax = "v1"
+
+info(
+	title: "api"
+	desc: "question&answer 说明"
+	author: "MJ"
+	email: "1725014728@qq.com"
+	version: "v1"
+)
+
+type (
+	User {
+		Uid      int64  `json:"uid"`
+		UserName string `json:"user_name"`
+		Avatar   string `json:"avatar"`
+		Gender   int    `json:"gender"`
+	}
+)
+// Question  nakeCase(apiFieldName)
+type (
+	QuestionBase {
+		User  User   `form:"user"  json:"user"`
+		Topic string `form:"topic" json:"topic"`
+		Title string `form:"title" json:"title"`
+		Value string `form:"value" json:"value"`
+	}
+	QuestionInfo {
+		Qid          int64        `json:"qid"`
+		QuestionBase QuestionBase `json:"question_base"`
+		Comments     int64        `json:"comments"`
+		Followers    int64        `json:"followers"`
+		Likes        int64        `json:"likes"`
+		Pageviews    int64        `json:"pageviews"`
+		UpdateAt     int64        `json:"updateAt"`
+	}
+)
+type (
+	PostQuestionReq {
+		Uid      int64  `form:"uid" json:"uid"`
+		Topic    string `form:"topic" json:"topic"`
+		Title    string `form:"title" json:"title"`
+		Value    string `form:"value" json:"value"`
+		CreateAt int64  `form:"create_at" json:"create_at"`
+	}
+
+	PostQuestionResp {
+		Data    PostQuestionReq `json:"data"`
+		Message string          `json:"message"`
+		Status  int             `json:"status"`
+	}
+)
+
+type (
+	UpdateQuestionReq {
+		Uid      int64  `form:"uid" json:"uid"`
+		Qid      int64  `form:"qid" json:"qid"`
+		Topic    string `form:"topic" json:"topic"`
+		Title    string `form:"title" json:"title"`
+		Value    string `form:"value" json:"value"`
+		Comments int64  `form:"comment" json:"comments"`
+		UpdateAt int64  `form:"delete_at" json:"update_at"`
+	}
+	UpdateQuestionResp {
+		Data    UpdateQuestionReq `json:"data"`
+		Message string            `json:"message"`
+		Status  int               `json:"status"`
+	}
+)
+
+type (
+	DeleteQuestionReq {
+		Uid      int64 `form:"uid"`
+		Qid      int64 `form:"qid"`
+		DeleteAt int64 `form:"delete_at"`
+	}
+	DeleteQuestionResp {
+		Message string `json:"message"`
+		Status  int    `json:"status"`
+	}
+)
+
+//type (
+//	GetQuestionListReq {
+//		Qid      int64 `form:"qid"`
+//		Uid      int64 `form:"uid"`
+//`
+//	}
+//	GetQuestionListResp {
+//		QuestionInfo QuestionInfo `json:"question_info"`
+//		AnswerLists  []AnswerInfo `json:"answerLists"`
+//		Message      string       `json:"message"`
+//		Status       int          `json:"status"`
+//	}
+//)
+
+type (
+	GetQuestionReq {
+		Qid      int64 `form:"qid"`
+		PageSize int64 `form:"page_size"`
+	}
+	GetQuestionResp {
+		QuestionInfo QuestionInfo `json:"question_info"`
+		AnswerLists  []AnswerInfo `json:"answerLists"`
+		Message      string       `json:"message"`
+		Status       int          `json:"status"`
+	}
+)
+
+// Answer
+type (
+	AnswerInfo {
+		User        User   `json:"'user'"`
+		Value       string `json:"value"`
+		Comments    int64  `json:"comments"`
+		Agrees      int64  `json:"agrees"`
+		DisAgrees   int64  `json:"dis_agrees"`
+		Likes       int64  `json:"likes"`
+		Collections int64  `json:"collections"`
+		UpdateAt    int64  `json:"update_at"`
+	}
+)
+
+type (
+	PostAnswerReq {
+		Uid      int64  `form:"uid" json:"uid"`
+		Pid      int64  `form:"pid" json:"pid"`
+		Value    string `form:"value" json:"value"`
+		Type     string `form:"type" json:"type"`
+		CreateAt int64  `form:"create_at" json:"create_at"`
+	}
+
+	PostAnswerResp {
+		Data    PostAnswerReq `json:"data"`
+		Message string        `json:"message"`
+		Status  int           `json:"status"`
+	}
+)
+
+type (
+	UpdateAnswerReq {
+		Uid      int64  `form:"uid" json:"uid"`
+		Pid      int64  `form:"pid" json:"pid"`
+		Value    string `form:"value" json:"value"`
+		UpdateAt int64  `form:"update_at" json:"update_at"`
+	}
+
+	UpdateAnswerResp {
+		Data    UpdateAnswerReq `json:"data"`
+		Message string          `json:"message"`
+		Status  int             `json:"status"`
+	}
+)
+
+type (
+	DeleteAnswerReq {
+		Uid      int64 `form:"uid"`
+		Qid      int64 `form:"qid"`
+		DeleteAt int64 `form:"delete_at"`
+	}
+
+	DeleteAnswerResp {
+		Message string `json:"message" "`
+		Status  int    `json:"status"`
+	}
+)
+
+@server(
+	group:  question
+	middleware :Auth
+)
+
+service qa {
+	
+	@handler postQuestion
+	post /question/post (PostQuestionReq) returns (PostQuestionResp)
+	
+	@handler updateQuestion
+	post /question/update (UpdateQuestionReq) returns (UpdateQuestionResp)
+	
+	@handler deleteQuestion
+	delete /question/delete (DeleteQuestionReq) returns (DeleteQuestionResp)
+}
+
+@server(
+	group:  question
+)
+
+service qa {
+	@handler getQuestion
+	get /question/:id (GetQuestionReq) returns (GetQuestionResp)
+	
+}
+
+@server(
+	group: answer
+	middleware :Auth
+)
+
+service qa {
+	@handler postAnswer
+	post /answer/post (PostAnswerReq) returns (PostAnswerResp)
+	
+	@handler updateAnswer
+	post /answer/update (UpdateAnswerReq) returns (UpdateAnswerResp)
+	
+	@handler deleteAnswer
+	delete /answer/delete (DeleteAnswerReq) returns (DeleteAnswerResp)
+}
+
+//goctl api go -api qa.api -dir . -style goZero

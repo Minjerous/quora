@@ -1,0 +1,129 @@
+syntax = "v1"
+
+info(
+	title: "api"
+	desc: "question&answer 说明"
+	author: "MJ"
+	email: "1725014728@qq.com"
+	version: "v1"
+)
+
+type (
+	User {
+		Uid      int64  `json:"uid"`
+		UserName string `json:"user_name"`
+		Avatar   string `json:"avatar"`
+		Gender   int    `json:"gender"`
+	}
+	ChildComments {
+		Id           int64  `json:"id"`
+		Content      string `json:"content"`
+		Likes        int64  `json:"likes"`
+		ResourceType string `json:"resource_type"`
+		User         User   `json:"user"`
+		ReplyUser    User   `json:"reply_user"`
+		CreateAt     int64  `json:"create_at"`
+		IP           string `json:"ip"`
+	}
+	Comment {
+		Id                int64           `json:"id"`
+		ResourceType      string          `json:"resource_type"` //Answer Artical
+		User              User            `json:"user"`
+		Content           string          `json:"content"`
+		Likes             int64           `json:"likes"`
+		ChildCommentCount int64           `json:"child_comment_count"`
+		ChildComments     []ChildComments `json:"childcomments"`
+		CreateAt          int64           `json:"create_at"`
+	}
+	CommentStatus {
+		Status  int64  `json:"status"`
+		Message string `json:"message"`
+	}
+)
+
+type (
+	PostCommentReq {
+		Uid          int64  `form:"uid" json:"uid"`
+		ResourceType string `form:"resource_type" json:"resource_type"`
+		Type         string `form:"type" json:"type"`
+		IP           string `form:"ip" json:"ip"`
+		Pid          int64  `form:"pid" json:"pid"`
+		Content      string `form:"content" json:"content"`
+		CreateAt     int64  `form:"create_at" json:"create_at"`
+	}
+	PostCommentResp {
+		Data PostCommentReq `json:"data"`
+		Id   int64          `json:"id"`
+	}
+)
+
+type (
+	DeleteCommmentReq {
+		Id   int64  `form:"id"`
+		Type string `form:"type"`
+	}
+	DeleteCommmentResp {
+		Message string `json:"message"`
+		Status  int    `json:"status"`
+	}
+)
+
+type (
+	GetCommentReq {
+		Pid int64 `json:"pid"`
+	}
+	GetCommentResp {
+		CommentStatus CommentStatus `json:"comment_status"`
+		Data          []Comment     `json:"data"`
+	}
+)
+
+type (
+	GetChildCommentReq {
+		Pid int64 `form:"pid"`
+	}
+	GetChildCommentResp {
+		Data []ChildComments `json:"data"`
+	}
+)
+
+type (
+	PostChildCommentReq {
+		Pid      int64  `form:"pid" json:"pid"`
+		Uid      int64  `form:"uid" json:"uid"`
+		Content  string `form:"content" json:"content"`
+		CreateAt int64  `form:"create_at" json:"create_at"`
+		Repy_uid int64  `form:"repy_uid" json:"repy_uid"`
+		Repy_cid int64  `form:"repy_cid" json:"repy_cid"`
+	}
+	PostChlidCommentResp {
+		Data PostChildCommentReq `json:"data"`
+		Id   int64               `json:"id"`
+	}
+)
+
+@server(
+	middleware :Auth
+	group :comment
+)
+service comment {
+	@handler postComment
+	post /comment/post  (PostCommentReq) returns (PostCommentResp)
+	
+	@handler postChildComment
+	post /comment/child/post  (PostChildCommentReq) returns (PostChlidCommentResp)
+	
+	@handler deleteComment
+	delete /comment/delete (DeleteCommmentReq) returns (DeleteCommmentResp)
+}
+
+@server(
+	group :comment
+)
+service comment {
+	@handler getComment
+	get /comment/get  (GetCommentReq) returns (GetCommentResp)
+	
+	@handler GetChildComment
+	get /comment/child/get  (GetChildCommentReq) returns (GetChildCommentResp)
+}
