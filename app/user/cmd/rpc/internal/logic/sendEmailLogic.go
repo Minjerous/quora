@@ -6,7 +6,7 @@ import (
 	"quora/app/user/cmd/rpc/internal/config"
 	"quora/app/user/cmd/rpc/internal/svc"
 	"quora/app/user/cmd/rpc/pb"
-	"quora/app/user/model"
+	redisModel "quora/common/redis"
 	"quora/common/tool"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -30,7 +30,7 @@ func (l *SendEmailLogic) SendEmail(in *pb.SendEmailReq) (*pb.SendEmailResp, erro
 	if !tool.VerifyEmailFormat(in.Email) {
 		return nil, ErrFormatError
 	}
-	rs := model.NewRedisStore(fmt.Sprintf("Email:%s", in.Email), l.svcCtx.Redis, 120, l.ctx)
+	rs := redisModel.NewRedisStore(fmt.Sprintf("Email:%s", in.Email), l.svcCtx.Redis, 120, l.ctx)
 	code := tool.RandCode()
 
 	err := rs.SetRedisValue(code)

@@ -6,8 +6,8 @@ import (
 	"github.com/zeromicro/go-zero/zrpc"
 	"quora/app/user/cmd/api/internal/config"
 	"quora/app/user/cmd/rpc/user"
-	"quora/app/user/model"
 	"quora/common/midleware"
+	redisModel "quora/common/redis"
 )
 
 type ServiceContext struct {
@@ -21,7 +21,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
 		Config:  c,
 		UserRpc: user.NewUser(zrpc.MustNewClient(c.UserRpcConf)),
-		Redis:   model.InitRedis(c.RedisDB.Addr, c.RedisDB.Pass),
+		Redis:   redisModel.InitRedis(c.RedisDB.Addr, c.RedisDB.Pass),
 		Auth:    midleware.NewAuthMiddleware().Handle,
 	}
 }

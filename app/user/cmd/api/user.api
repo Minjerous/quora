@@ -115,7 +115,7 @@ service user {
 
 @server(
 	group: user
-	middleware: Auth
+	jwt: Auth
 )
 
 service user {

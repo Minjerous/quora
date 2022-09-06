@@ -42,10 +42,11 @@ func (l *GenerateTokenLogic) GenerateToken(in *pb.GenerateTokenReq) (*pb.Generat
 
 func (l *GenerateTokenLogic) getJwtToken(secretKey string, iat, seconds int64, in *pb.GenerateTokenReq) (string, error) {
 	claims := make(jwt.MapClaims)
-	claims["id"] = in.UserId
+	claims["uid"] = in.UserId
 	claims["name"] = in.Name
 	claims["exp"] = iat + seconds
 	token := jwt.New(jwt.SigningMethodHS256)
 	token.Claims = claims
 	return token.SignedString([]byte(secretKey))
+
 }

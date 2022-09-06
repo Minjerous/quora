@@ -85,11 +85,11 @@ services:
       - quora_net
 
   action-rpc:
-    build: app/action/cmd/rpc
+    build: app/mq/cmd/rpc
     container_name: quora-action-rpc
     restart: always
     ports:
-      - "8084:8084"
+      - "9094:9094"
     environment:
       - TZ=Asia/Shanghai
     networks:
@@ -100,7 +100,7 @@ services:
     container_name : quora-mq-api
     restart : always
     ports :
-      - "8084:8084"
+      - "8085:8085"
     environment :
       - TZ=Asia/Shanghai
     networks :
@@ -112,7 +112,7 @@ services:
     container_name : quora-mq-rpc
     restart : always
     ports :
-      - "8084:8084"
+      - "9095:9095"
     environment :
       - TZ=Asia/Shanghai
     networks :

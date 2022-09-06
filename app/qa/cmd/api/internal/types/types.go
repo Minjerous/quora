@@ -67,8 +67,10 @@ type DeleteQuestionResp struct {
 }
 
 type GetQuestionReq struct {
-	Qid      int64 `form:"qid"`
-	PageSize int64 `form:"page_size"`
+	Id       int64  `form:"qid"`
+	PageSize int64  `form:"page_size"`
+	Page     int64  `form:"page"`
+	OderBy   string `form:"oderby"`
 }
 
 type GetQuestionResp struct {

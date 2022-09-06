@@ -1,119 +1,117 @@
 /**
- * @Author: MJ
- * @Email: 1725014728@qq.com
- * @Date: 2022/8/24-11:11
- * @Desc: TODO
- */
+* @Author: MJ
+* @Email: 1725014728@qq.com
+* @Date: 2022/8/24-11:11
+* @Desc: TODO
+*/
 syntax = "v1"
 
 info(
-    title: "type title here"
-    desc: "type desc here"
-    author: "type author here"
-    email: "type email here"
-    version: "type version here"
+	title: "type title here"
+	desc: "type desc here"
+	author: "type author here"
+	email: "type email here"
+	version: "type version here"
 )
 
-// 赞同(agree) ->回答
-
-// 喜欢(like)-> 文章 ->回答 ->评论 ->问题
-
-// 收藏(collection) ->文章 ->提问
-
-// 关注(follow) -> 人 -> 问题 ->回答（追跟新）
-
-
-//gree
 type (
-    AgreeReq {
-        Uid int64 `form:"uid"`
-        Pid int64 `form:"pid"`
-        Object string `form:"object"`
-    }
-    AgreeResq{
-        message string `form:"message"`
-        status int64 `form:"status"`
-    }
+	AgreeReq {
+		Pid    int64  `form:"pid"`
+		Object string `form:"object"`
+		Puid   int64  `form:"puid"`
+		Opt    int64  `form:"opt"`
+	}
+	AgreeResq {
+		Message string `json:"message"`
+		Status  int64  `json:"status"`
+	}
 )
 
 @server(
-    group: agree
-    jwt:JwtAuth
+	group: agree
+	jwt :Auth
 )
 
 service action {
-    @handler agree
-    post /user/action/agree  (AgreeReq) returns (AgreeResq)
+	@handler agree
+	post /user/action/agree  (AgreeReq) returns (AgreeResq)
 }
+
 //Like
 
 type (
-    LikeReq {
-        Uid int64 `form:"uid"`
-        Pid int64 `form:"pid"`
-        Object string `form:"object"`
-    }
-    LikeResq{
-        message string `form:"message"`
-        status int64 `form:"status"`
-    }
+	LikeReq {
+		Pid    int64  `form:"pid"`
+		Object string `form:"object"`
+		PUid   int64  `form:"puid"`
+	}
+	LikeResp {
+		Message string `json:"message"`
+		Status  int64  `json:"status"`
+	}
 )
 
 @server(
-    group: like
-    jwt:JwtAuth
+	group: like
+	jwt :Auth
 )
 
 service action {
-    @handler Like
-    post /user/action/Like  (LikeReq) returns (LikeResq)
+	@handler Like
+	post /user/action/Like  (LikeReq) returns (LikeResp)
 }
 
 //Collection
 
 type (
-    CollectionReq {
-        Uid int64 `form:"uid"`
-        Pid int64 `form:"pid"`
-        Object string `form:"object"`
-    }
-    CollectionResq{
-        message string `form:"message"`
-        status int64 `form:"status"`
-    }
+	CollectionReq {
+		Pid    int64  `form:"pid"`
+		PUid   int64  `form:"puid"`
+		Object string `form:"object"`
+	}
+	CollectionResp {
+		Message string `josn:"message"`
+		Status  int64  `josn:"status"`
+	}
 )
 
 @server(
-    group: collection
-    jwt:JwtAuth
+	group: collection
+	jwt :Auth
 )
 
 service action {
-    @handler collection
-    post /user/action/collection  (CollectionReq) returns (CollectionResq)
+	@handler collection
+	post /user/action/collection  (CollectionReq) returns (CollectionResp)
 }
-
 
 //follow
 
 type (
-    FollowReq {
-        Uid int64 `form:"uid"`
-        Pid int64 `form:"pid"`
-        Object string `form:"object"`
-    }
-    FollowResq{
-        message string `form:"message"`
-        status int64 `form:"status"`
-    }
+	FollowReq {
+		Pid    int64  `form:"pid"`
+		Object string `form:"object"`
+	}
+	FollowResp {
+		Message string `form:"message"`
+		Status  int64  `form:"status"`
+	}
+)
+
+type (
+	User {
+		Id       int64  `json:"id"`
+		UserName string `json:"userName"`
+		Avatar   string `json:"avatar"`
+	}
 )
 
 @server(
-    group: follow
-    middleware :Auth
+	group: follow
+	jwt :Auth
 )
 
 service action {
-    @handler follow
-    post /user/action/follow  (FollowReq) returns (FollowResq)
+	@handler follow
+	post /user/action/follow  (FollowReq) returns (FollowResp)
 }

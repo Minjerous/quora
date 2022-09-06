@@ -7,5 +7,6 @@ import (
 
 type Config struct {
 	rest.RestConf
+
 	CommentRpc zrpc.RpcClientConf
 }

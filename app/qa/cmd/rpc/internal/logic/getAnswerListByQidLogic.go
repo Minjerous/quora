@@ -2,7 +2,7 @@ package logic
 
 import (
 	"context"
-
+	"github.com/jinzhu/copier"
 	"quora/app/qa/cmd/rpc/internal/svc"
 	"quora/app/qa/cmd/rpc/pb"
 
@@ -24,7 +24,20 @@ func NewGetAnswerListByQidLogic(ctx context.Context, svcCtx *svc.ServiceContext)
 }
 
 func (l *GetAnswerListByQidLogic) GetAnswerListByQid(in *pb.GetAnswerListByPidReq) (*pb.GetAnswerListByPidResp, error) {
-	// todo: add your logic here and delete this line
+	AnswerLists, err := l.svcCtx.AnswerModel.FindByPid(l.ctx, in.Page, in.PageSize, in.OderBy, in.Qid)
 
-	return &pb.GetAnswerListByPidResp{}, nil
+	if err != nil {
+		return nil, err
+	}
+	var resp []*pb.Answer
+	if len(AnswerLists) > 0 {
+		for _, Answer := range AnswerLists {
+			var answer pb.Answer
+			_ = copier.Copy(&Answer, answer)
+			answer.CreatedAt = Answer.CreatedAt.Unix()
+			answer.UpdateAt = Answer.UpdateAt.Unix()
+			resp = append(resp, &answer)
+		}
+	}
+	return &pb.GetAnswerListByPidResp{Answer: resp}, nil
 }

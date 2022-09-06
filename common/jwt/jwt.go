@@ -1,6 +1,6 @@
-package model
+package jwtModel
 
 type MyClaims struct {
-	Name string
 	Id   int64
+	Name string
 }

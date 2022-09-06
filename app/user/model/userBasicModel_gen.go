@@ -47,15 +47,8 @@ type (
 		Name      string    `db:"name"`
 		Password  string    `db:"password"`
 		Email     string    `db:"email"`
-		Gender    int64     `db:"gender"`
-		Agreed    int64     `db:"agreed"`
-		Liked     int64     `db:"liked"`
-		Collected int64     `db:"collected"`
-		Follower  int64     `db:"follower"`
-		Following int64     `db:"following"`
 		CreatedAt time.Time `db:"created_at"`
 		Salt      string    `db:"salt"`
-		Avatar    string    `db:"avatar"`
 	}
 )
 
@@ -71,8 +64,8 @@ func (m *defaultUserBasicModel) Insert(ctx context.Context, data *UserBasic) (sq
 	quoraUserBasicIdKey := fmt.Sprintf("%s%v", cacheQuoraUserBasicIdPrefix, data.Id)
 	quoraUserBasicNameKey := fmt.Sprintf("%s%v", cacheQuoraUserBasicNamePrefix, data.Name)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, userBasicRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Name, data.Password, data.Email, data.Gender, data.Agreed, data.Liked, data.Collected, data.Follower, data.Following, data.CreatedAt, data.Salt, data.Avatar)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?)", m.table, userBasicRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Name, data.Password, data.Email, data.CreatedAt, data.Salt)
 	}, quoraUserBasicEmailKey, quoraUserBasicIdKey, quoraUserBasicNameKey)
 	return ret, err
 }
@@ -140,7 +133,7 @@ func (m *defaultUserBasicModel) Update(ctx context.Context, data *UserBasic) err
 	quoraUserBasicNameKey := fmt.Sprintf("%s%v", cacheQuoraUserBasicNamePrefix, data.Name)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, userBasicRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Name, data.Password, data.Email, data.Gender, data.Agreed, data.Liked, data.Collected, data.Follower, data.Following, data.CreatedAt, data.Salt, data.Avatar, data.Id)
+		return conn.ExecCtx(ctx, query, data.Name, data.Password, data.Email, data.CreatedAt, data.Salt, data.Id)
 	}, quoraUserBasicEmailKey, quoraUserBasicIdKey, quoraUserBasicNameKey)
 	return err
 }

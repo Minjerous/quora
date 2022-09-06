@@ -26,7 +26,7 @@ func NewGetCommentLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetCom
 }
 
 func (l *GetCommentLogic) GetComment(req *types.GetCommentReq) (resp *types.GetCommentResp, err error) {
-	CommentRpcResp, err := l.svcCtx.CommentRpc.GetCommentById(l.ctx, &pb.GetCommentByIdReq{Id: req.Pid})
+	CommentRpcResp, err := l.svcCtx.CommentRpc.GetCommentByPid(l.ctx, &pb.GetCommentByPidReq{Id: req.Pid})
 
 	if err != nil {
 		return nil, err

@@ -24,7 +24,6 @@ message Answer {
   int64 deletedAt = 12; //deletedAt
   int64 updateAt = 13; //updateAt
   int64 comments=14;
-
 }
 
 message AddAnswerReq {
@@ -204,9 +203,11 @@ message SearchQuestionResp {
 message GetAnswerListByPidReq{
   int64  qid = 1;
   int64  PageSize = 2;
+  string  oderBy=3;
+  int64  page=4;
 }
 message GetAnswerListByPidResp{
-  repeated Question question=1;
+  repeated Answer Answer=1;
 }
 
 message GetAnswerListByUidReq{

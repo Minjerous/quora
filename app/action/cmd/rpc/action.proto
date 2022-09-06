@@ -1,3 +1,54 @@
 syntax = "proto3";
 
-package template;
+
+option go_package ="./pb";
+
+package pb;
+
+message AgreeReq{
+  int64 uid =1;
+  int64 pid  =2;
+  string object=3;
+  int64 puid  =4;
+}
+
+message AgreeResp{
+  string msg=1;
+}
+
+message FollowReq{
+  int64 uid =1;
+  int64 pid  =2;
+  string object=3;
+  int64 puid  =4;
+}
+message FollowResp{
+  string msg=1;
+}
+
+message LikeReq{
+  int64 uid =1;
+  int64 pid  =2;
+  int64 puid  =3;
+  string object=4;
+}
+message LikeResp{
+  string msg=1;
+}
+message CollectionReq{
+  int64 uid =1;
+  int64 pid  =2;
+  string object=4;
+}
+
+message CollectionResp{
+  string msg=1;
+}
+
+service action{
+  rpc AddAgree(AgreeReq) returns (AgreeResp);
+  rpc DisAgree(AgreeReq) returns (AgreeResp);
+  rpc Follow(FollowReq) returns (FollowResp);
+  rpc Like(LikeReq) returns (LikeResp);
+  rpc Collection(CollectionReq) returns (CollectionResp);
+}

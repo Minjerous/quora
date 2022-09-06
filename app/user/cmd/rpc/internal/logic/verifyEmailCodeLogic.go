@@ -3,7 +3,7 @@ package logic
 import (
 	"context"
 	"fmt"
-	"quora/app/user/model"
+	redisModel "quora/common/redis"
 
 	"quora/app/user/cmd/rpc/internal/svc"
 	"quora/app/user/cmd/rpc/pb"
@@ -26,7 +26,7 @@ func NewVerifyEmailCodeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *V
 }
 
 func (l *VerifyEmailCodeLogic) VerifyEmailCode(in *pb.VerifyEmailCodeReq) (*pb.VerifyEmailCodeResp, error) {
-	rs := model.NewRedisStore(fmt.Sprintf("Email:%s", in.Email), l.svcCtx.Redis, 120, l.ctx)
+	rs := redisModel.NewRedisStore(fmt.Sprintf("Email:%s", in.Email), l.svcCtx.Redis, 120, l.ctx)
 	redisCode, err := rs.GetRedisValue()
 	if err != nil {
 		return nil, err

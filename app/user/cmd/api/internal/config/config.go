@@ -8,10 +8,6 @@ import (
 
 type Config struct {
 	rest.RestConf
-	JwtAuth struct {
-		AccessSecret string
-		AccessExpire int64
-	}
 
 	UserRpcConf zrpc.RpcClientConf
 
@@ -23,4 +19,8 @@ type Config struct {
 		Pass string
 	}
 	Cache cache.CacheConf
+	Auth  struct {
+		AccessSecret string
+		AccessExpire int64
+	}
 }

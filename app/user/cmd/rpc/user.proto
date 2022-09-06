@@ -38,17 +38,9 @@ message LoginResp {
   bool   OK=4;
 }
 
-message GenerateTokenReq {
-  int64 userId = 1;
-  string name=2;
-}
 
-message GenerateTokenResp {
-  string accessToken = 1;
-  int64  accessExpire = 2;
-  int64  refreshAfter = 3;
-  bool   OK=4;
-}
+
+
 
 message OAuthLoginReq {
   string Code = 1;
@@ -96,6 +88,5 @@ service User {
   rpc oauthLogin(LoginReq) returns(OAuthLoginResp);
   rpc register(RegisterReq) returns (RegisterResp);
   rpc verifyEmailCode (VerifyEmailCodeReq) returns (VerifyEmailCodeResp);
-  rpc generateToken(GenerateTokenReq) returns(GenerateTokenResp);
   rpc sendEmail(SendEmailReq) returns (SendEmailResp);
 }

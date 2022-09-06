@@ -6,7 +6,7 @@ import (
 	"quora/app/user/cmd/api/internal/svc"
 	"quora/app/user/cmd/api/internal/types"
 	"quora/app/user/cmd/rpc/pb"
-	"quora/app/user/model"
+	redisModel "quora/common/redis"
 	"quora/common/tool"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -39,7 +39,7 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 			Msg:    "用户名or密码不规范",
 		}, nil
 	}
-	rs := model.NewRedisStore(fmt.Sprintf("Email:%s", req.Email), l.svcCtx.Redis, 120, l.ctx)
+	rs := redisModel.NewRedisStore(fmt.Sprintf("Email:%s", req.Email), l.svcCtx.Redis, 120, l.ctx)
 	redisCode, err := rs.GetRedisValue()
 	if err != nil {
 		return &types.RegisterResp{

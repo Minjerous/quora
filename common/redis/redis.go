@@ -1,4 +1,4 @@
-package model
+package redisModel
 
 import (
 	"context"
@@ -60,4 +60,72 @@ func (rs *RedisStore) GetRedisPages(key string, obj interface{}) bool {
 		json.Unmarshal([]byte(val), &obj)
 		return true
 	}
+}
+
+//用于 点赞 关注等功能
+
+type RedisSet struct {
+	Id      int64
+	Object  string
+	Conn    *redis.Client
+	Context context.Context
+}
+
+func NewRedisSet(context context.Context, Objet string, Id int64, Conn *redis.Client) *RedisSet {
+	return &RedisSet{
+		Id:      Id,
+		Object:  Objet,
+		Conn:    Conn,
+		Context: context,
+	}
+}
+
+//当前用户是否点赞 or 关注
+
+func (rs *RedisSet) JudgeSetByUid() (bool, error) {
+	val, err := rs.Conn.SIsMember(rs.Context, rs.Object, rs.Id).Result()
+	if err != nil {
+		return val, err
+	}
+	return val, err
+}
+
+//-
+
+func (rs *RedisSet) SetAction() error {
+	val, err := rs.Conn.SIsMember(rs.Context, rs.Object, rs.Id).Result()
+	if err != nil {
+		return err
+	}
+	if val == false {
+		_, err := rs.Conn.SAdd(rs.Context, rs.Object, rs.Id).Result()
+		if err != nil {
+			return err
+		}
+	} else {
+		_, err := rs.Conn.SRem(rs.Context, rs.Object, rs.Id).Result()
+		if err != nil {
+			return err
+		}
+	}
+
+	return err
+}
+
+// 获赞次数
+
+func (rs *RedisSet) SetNumberByUid() (int64, error) {
+	val, err := rs.Conn.SCard(rs.Context, rs.Object).Result()
+	if err != nil {
+		return val, err
+	}
+	return val, err
+}
+
+func (rs *RedisSet) SetMembers() (int64, error) {
+	val, err := rs.Conn.SCard(rs.Context, rs.Object).Result()
+	if err != nil {
+		return val, err
+	}
+	return val, err
 }

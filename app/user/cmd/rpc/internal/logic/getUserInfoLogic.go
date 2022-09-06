@@ -29,7 +29,7 @@ func NewGetUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUs
 }
 
 func (l *GetUserInfoLogic) GetUserInfo(in *pb.GetUserInfoReq) (*pb.GetUserInfoResp, error) {
-	User, err := l.svcCtx.UserBasicModel.FindOne(l.ctx, in.Id)
+	User, err := l.svcCtx.UserInfoModel.FindOne(l.ctx, in.Id)
 
 	if err != nil {
 		if err == model.ErrNotFound {

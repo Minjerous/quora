@@ -3,6 +3,7 @@ package question
 import (
 	"context"
 	"github.com/jinzhu/copier"
+	"quora/app/qa/cmd/rpc/pb"
 	"quora/app/qa/cmd/rpc/qa"
 	"sync"
 
@@ -30,12 +31,31 @@ func NewGetQuestionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetQu
 
 func (l *GetQuestionLogic) GetQuestion(req *types.GetQuestionReq) (resp *types.GetQuestionResp, err error) {
 	var (
-		QuestionResp *qa.GetQuestionByIdResp
-		//AnswerListResp *qa.GetAnswerListByQidResp
+		QuestionResp   *qa.GetQuestionByIdResp
+		AnswerListResp *qa.GetAnswerListByPidResp
 	)
-	//User := tool.GetUserFromCtx(l.ctx)
+	wg.Add(3)
+
+	go func() {
+		defer wg.Done()
+		AnswerListResp, err = l.svcCtx.QA.GetAnswerListByQid(l.ctx, &pb.GetAnswerListByPidReq{
+			Qid:      req.Id,
+			PageSize: req.PageSize,
+			OderBy:   req.OderBy,
+			Page:     req.Page,
+		})
+	}()
+
+	go func() {
+		defer wg.Done()
+		QuestionResp, err = l.svcCtx.QA.GetQuestionById(l.ctx, &pb.GetQuestionByIdReq{
+			Id:       req.Id,
+			PageSize: req.PageSize,
+		})
+	}()
 
 	wg.Wait()
+
 	if err != nil {
 		return nil, err
 	}
@@ -43,8 +63,20 @@ func (l *GetQuestionLogic) GetQuestion(req *types.GetQuestionReq) (resp *types.G
 	var QuestionInfo types.QuestionInfo
 	_ = copier.Copy(&QuestionInfo, QuestionResp.Question)
 
+	var typesAnswerInfoList []types.AnswerInfo
+
+	if len(AnswerListResp.Answer) > 0 {
+
+		for _, Answer := range AnswerListResp.Answer {
+
+			var typeHomestayOrder types.AnswerInfo
+			_ = copier.Copy(&typeHomestayOrder, Answer)
+			typesAnswerInfoList = append(typesAnswerInfoList, typeHomestayOrder)
+		}
+	}
+
 	return &types.GetQuestionResp{
-		AnswerLists:  []types.AnswerInfo{},
+		AnswerLists:  typesAnswerInfoList,
 		QuestionInfo: QuestionInfo,
 		Message:      "成功",
 		Status:       200,
