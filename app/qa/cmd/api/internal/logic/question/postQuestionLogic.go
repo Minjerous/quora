@@ -2,6 +2,7 @@ package question
 
 import (
 	"context"
+	"fmt"
 	"quora/app/qa/cmd/rpc/pb"
 	"quora/common/tool"
 	"time"
@@ -38,6 +39,7 @@ func (l *PostQuestionLogic) PostQuestion(req *types.PostQuestionReq) (resp *type
 	})
 
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 	return &types.PostQuestionResp{

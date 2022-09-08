@@ -26,11 +26,9 @@ type QuestionInfo struct {
 }
 
 type PostQuestionReq struct {
-	Uid      int64  `form:"uid" json:"uid"`
-	Topic    string `form:"topic" json:"topic"`
-	Title    string `form:"title" json:"title"`
-	Value    string `form:"value" json:"value"`
-	CreateAt int64  `form:"create_at" json:"create_at"`
+	Topic string `form:"topic" json:"topic"`
+	Title string `form:"title" json:"title"`
+	Value string `form:"value" json:"value"`
 }
 
 type PostQuestionResp struct {
@@ -92,11 +90,9 @@ type AnswerInfo struct {
 }
 
 type PostAnswerReq struct {
-	Uid      int64  `form:"uid" json:"uid"`
-	Pid      int64  `form:"pid" json:"pid"`
-	Value    string `form:"value" json:"value"`
-	Type     string `form:"type" json:"type"`
-	CreateAt int64  `form:"create_at" json:"create_at"`
+	Pid   int64  `form:"pid" json:"pid"`
+	Value string `form:"value" json:"value"`
+	Type  string `form:"type" json:"type"`
 }
 
 type PostAnswerResp struct {

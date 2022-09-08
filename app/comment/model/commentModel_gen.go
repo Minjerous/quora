@@ -21,14 +21,15 @@ var (
 	commentRows                = strings.Join(commentFieldNames, ",")
 	commentRowsExpectAutoSet   = strings.Join(stringx.Remove(commentFieldNames, "`Id`", "`create_time`", "`update_time`"), ",")
 	commentRowsWithPlaceHolder = strings.Join(stringx.Remove(commentFieldNames, "`Id`", "`create_time`", "`update_time`"), "=?,") + "=?"
-
-	cacheQuoraCommentIdPrefix = "cache:quora:comment:id:"
+	cacheCommentQidPrefix      = "cach:quora:comment:qid"
+	cacheQuoraCommentIdPrefix  = "cache:quora:comment:id:"
 )
 
 type (
 	commentModel interface {
 		Insert(ctx context.Context, data *Comment) (sql.Result, error)
 		FindOne(ctx context.Context, id int64) (*Comment, error)
+		FindByPid(ctx context.Context, page, pageSize int64, orderBy string, pid int64) ([]*Comment, error)
 		Update(ctx context.Context, data *Comment) error
 		Delete(ctx context.Context, id int64) error
 	}
@@ -77,6 +78,33 @@ func (m *defaultCommentModel) FindOne(ctx context.Context, id int64) (*Comment, 
 	switch err {
 	case nil:
 		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
+func (m *defaultCommentModel) FindByPid(ctx context.Context, page, pageSize int64, orderBy string, qid int64) ([]*Comment, error) {
+	quoraAnswerIdKey := fmt.Sprintf("%s%v", cacheCommentQidPrefix, qid)
+
+	if orderBy == "" {
+		orderBy = "likes DESC"
+	}
+
+	if page < 1 {
+		page = 1
+	}
+	offset := (page - 1) * pageSize
+
+	var resp []*Comment
+	err := m.QueryRowCtx(ctx, &resp, quoraAnswerIdKey, func(ctx context.Context, conn sqlx.SqlConn, v interface{}) error {
+		query := fmt.Sprintf("select %s from %s where `pid` = ? ORDER BY ? limit ? OFFSET ?", commentRows, m.table)
+		return conn.QueryRowCtx(ctx, v, query, qid, orderBy, pageSize, offset)
+	})
+	switch err {
+	case nil:
+		return resp, nil
 	case sqlc.ErrNotFound:
 		return nil, ErrNotFound
 	default:

@@ -103,7 +103,7 @@ type (
 )
 
 @server(
-	middleware :Auth
+	jwt :Auth
 	group :comment
 )
 service comment {

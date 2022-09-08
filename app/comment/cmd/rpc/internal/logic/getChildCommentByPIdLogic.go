@@ -24,10 +24,10 @@ func NewGetChildCommentByPIdLogic(ctx context.Context, svcCtx *svc.ServiceContex
 }
 
 func (l *GetChildCommentByPIdLogic) GetChildCommentByPId(in *pb.GetChildCommentByPidReq) (*pb.GetChildCommentByPidResp, error) {
-	// todo: Revise model function
 	_, err := l.svcCtx.ChildCommentModel.FindOne(l.ctx, in.Pid)
 	if err != nil {
 		return nil, err
 	}
+
 	return &pb.GetChildCommentByPidResp{}, nil
 }

@@ -7,21 +7,21 @@ import (
 
 type Config struct {
 	zrpc.RpcServerConf
+
 	DB struct {
 		DataSource string
 	}
-	MetaData struct {
-		UserName string
-		PassWord string
-	}
-	JwtAuth struct {
+
+	Auth struct {
 		AccessSecret string
 		AccessExpire int64
 	}
+
 	RedisDB struct {
 		Addr string
 		Pass string
 	}
+
 	Email struct {
 		ServerEmail string
 		PassWord    string

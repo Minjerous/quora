@@ -12,26 +12,24 @@ import (
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Auth},
-			[]rest.Route{
-				{
-					Method:  http.MethodPost,
-					Path:    "/comment/post",
-					Handler: comment.PostCommentHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/comment/child/post",
-					Handler: comment.PostChildCommentHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodDelete,
-					Path:    "/comment/delete",
-					Handler: comment.DeleteCommentHandler(serverCtx),
-				},
-			}...,
-		),
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/comment/post",
+				Handler: comment.PostCommentHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/comment/child/post",
+				Handler: comment.PostChildCommentHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodDelete,
+				Path:    "/comment/delete",
+				Handler: comment.DeleteCommentHandler(serverCtx),
+			},
+		},
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)
 
 	server.AddRoutes(

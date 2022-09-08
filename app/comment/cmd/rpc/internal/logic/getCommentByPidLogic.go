@@ -24,8 +24,8 @@ func NewGetCommentByPidLogic(ctx context.Context, svcCtx *svc.ServiceContext) *G
 }
 
 func (l *GetCommentByPidLogic) GetCommentByPid(in *pb.GetCommentByPidReq) (*pb.GetCommentByPidResp, error) {
-	// todo: add your logic here and delete this line
 	_, err := l.svcCtx.CommentModel.FindOne(l.ctx, in.Id)
+
 	if err != nil {
 		return nil, err
 	}

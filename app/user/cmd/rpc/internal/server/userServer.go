@@ -47,12 +47,12 @@ func (s *UserServer) VerifyEmailCode(ctx context.Context, in *pb.VerifyEmailCode
 	return l.VerifyEmailCode(in)
 }
 
-func (s *UserServer) GenerateToken(ctx context.Context, in *pb.GenerateTokenReq) (*pb.GenerateTokenResp, error) {
-	l := logic.NewGenerateTokenLogic(ctx, s.svcCtx)
-	return l.GenerateToken(in)
-}
-
 func (s *UserServer) SendEmail(ctx context.Context, in *pb.SendEmailReq) (*pb.SendEmailResp, error) {
 	l := logic.NewSendEmailLogic(ctx, s.svcCtx)
 	return l.SendEmail(in)
+}
+
+func (s *UserServer) GenerateToken(ctx context.Context, in *pb.GenerateTokenReq) (*pb.GenerateTokenResp, error) {
+	l := logic.NewGenerateTokenLogic(ctx, s.svcCtx)
+	return l.GenerateToken(in)
 }

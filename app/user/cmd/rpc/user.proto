@@ -82,6 +82,18 @@ message VerifyEmailCodeReq{
 message VerifyEmailCodeResp{
   bool OK=1;
 }
+message GenerateTokenReq {
+  int64 userId = 1;
+  string name=2;
+}
+
+message GenerateTokenResp {
+  string accessToken = 1;
+  int64  accessExpire = 2;
+  int64  refreshAfter = 3;
+  bool   OK=4;
+}
+
 service User {
   rpc getUserInfo(GetUserInfoReq) returns(GetUserInfoResp);
   rpc login(LoginReq) returns(LoginResp);
@@ -89,4 +101,5 @@ service User {
   rpc register(RegisterReq) returns (RegisterResp);
   rpc verifyEmailCode (VerifyEmailCodeReq) returns (VerifyEmailCodeResp);
   rpc sendEmail(SendEmailReq) returns (SendEmailResp);
+  rpc generateToken(GenerateTokenReq) returns(GenerateTokenResp);
 }

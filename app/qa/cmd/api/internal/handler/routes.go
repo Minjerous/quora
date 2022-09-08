@@ -13,26 +13,24 @@ import (
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Auth},
-			[]rest.Route{
-				{
-					Method:  http.MethodPost,
-					Path:    "/question/post",
-					Handler: question.PostQuestionHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/question/update",
-					Handler: question.UpdateQuestionHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodDelete,
-					Path:    "/question/delete",
-					Handler: question.DeleteQuestionHandler(serverCtx),
-				},
-			}...,
-		),
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/question/post",
+				Handler: question.PostQuestionHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/question/update",
+				Handler: question.UpdateQuestionHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodDelete,
+				Path:    "/question/delete",
+				Handler: question.DeleteQuestionHandler(serverCtx),
+			},
+		},
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)
 
 	server.AddRoutes(
@@ -46,25 +44,23 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	)
 
 	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Auth},
-			[]rest.Route{
-				{
-					Method:  http.MethodPost,
-					Path:    "/answer/post",
-					Handler: answer.PostAnswerHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/answer/update",
-					Handler: answer.UpdateAnswerHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodDelete,
-					Path:    "/answer/delete",
-					Handler: answer.DeleteAnswerHandler(serverCtx),
-				},
-			}...,
-		),
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/answer/post",
+				Handler: answer.PostAnswerHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/answer/update",
+				Handler: answer.UpdateAnswerHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodDelete,
+				Path:    "/answer/delete",
+				Handler: answer.DeleteAnswerHandler(serverCtx),
+			},
+		},
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)
 }

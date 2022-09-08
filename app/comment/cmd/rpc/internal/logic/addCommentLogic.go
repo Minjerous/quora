@@ -27,7 +27,7 @@ func NewAddCommentLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddCom
 
 // -----------------------comment-----------------------
 func (l *AddCommentLogic) AddComment(in *pb.AddCommentReq) (*pb.AddCommentResp, error) {
-	// todo: trans And Data
+
 	RS, err := l.svcCtx.CommentModel.Insert(l.ctx, &model.Comment{
 		ResourceType: in.ResourceType,
 		Uid:          in.Uid,

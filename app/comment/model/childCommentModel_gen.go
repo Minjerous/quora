@@ -29,6 +29,7 @@ type (
 	childCommentModel interface {
 		Insert(ctx context.Context, data *ChildComment) (sql.Result, error)
 		FindOne(ctx context.Context, id int64) (*ChildComment, error)
+		FindByPid(ctx context.Context, page, pageSize int64, orderBy string, qid int64) ([]*ChildComment, error)
 		Update(ctx context.Context, data *ChildComment) error
 		Delete(ctx context.Context, id int64) error
 	}
@@ -77,6 +78,33 @@ func (m *defaultChildCommentModel) FindOne(ctx context.Context, id int64) (*Chil
 	switch err {
 	case nil:
 		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
+func (m *defaultChildCommentModel) FindByPid(ctx context.Context, page, pageSize int64, orderBy string, qid int64) ([]*ChildComment, error) {
+	quoraAnswerIdKey := fmt.Sprintf("%s%v", cacheCommentQidPrefix, qid)
+
+	if orderBy == "" {
+		orderBy = "likes DESC"
+	}
+
+	if page < 1 {
+		page = 1
+	}
+	offset := (page - 1) * pageSize
+
+	var resp []*ChildComment
+	err := m.QueryRowCtx(ctx, &resp, quoraAnswerIdKey, func(ctx context.Context, conn sqlx.SqlConn, v interface{}) error {
+		query := fmt.Sprintf("select %s from %s where `pid` = ? ORDER BY ? limit ? OFFSET ?", childCommentRows, m.table)
+		return conn.QueryRowCtx(ctx, v, query, qid, orderBy, pageSize, offset)
+	})
+	switch err {
+	case nil:
+		return resp, nil
 	case sqlc.ErrNotFound:
 		return nil, ErrNotFound
 	default:
