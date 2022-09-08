@@ -139,12 +139,16 @@
 
 ## 2. 使用技术
 - [x] 微服务架构(go-zero)
+- [x] mysql
+- [x] 邮箱服务
 - [x] redis 
 - [x] etcd 注册发现服务
 - [x] docker-compose 
 - [x] asynq 异步任务
 - [x] grafa+premetheus 
 - [x] grpc 密码自定义设置和拦截器
+
+
 
 
 ### 2.1 后端框架
@@ -165,6 +169,7 @@
 - [x] 问答模块
 - [x] 评论模块
 - [x] 动作模块
+- [ ] feed流
 -
 
 
