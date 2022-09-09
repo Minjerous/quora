@@ -126,15 +126,15 @@
 </details>
 
 ## 1.1 grafana
-![img.png](img.png)
-![img_1.png](img_1.png)
+![img.png](doc/img.png)
+![img_1.png](doc/img_1.png)
 
 ## 1.2 gogs
 
 ## 1.3 asynqmon
-![img_3.png](img_3.png)
+![img_3.png](doc/img_3.png)
 ## 1.4 prometheus
-![img_2.png](img_2.png)
+![img_2.png](doc/img_2.png)
 
 
 ## 2. 使用技术
